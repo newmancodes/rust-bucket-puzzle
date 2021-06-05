@@ -1,11 +1,25 @@
-mod bucket;
+mod problem;
+mod solvers;
 
-use bucket::Bucket;
+use problem::bucket::Bucket;
+use problem::state::State;
+use solvers::solver::Solver;
+use solvers::solution::Solution;
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
+    fn we_can_help_john_mcclane_and_zeus() {
+        // Arrange
+        let solver: Solver;
+        let problem: State;
+
+        // Act
+        let solution: Option<Solution> = solver.solve(&problem);
+
+        // Assert
+        assert!(solution.is_some())
     }
 }
