@@ -6,9 +6,9 @@ pub struct State {
 }
 
 impl State {
-    pub fn new() -> Self {
+    pub fn new(buckets: Vec<Bucket>) -> Self {
         State {
-            buckets: vec![],
+            buckets,
             parent_state: None,
         }
     }
