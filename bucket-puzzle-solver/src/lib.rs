@@ -1,3 +1,7 @@
+mod bucket;
+
+use bucket::Bucket;
+
 #[cfg(test)]
 mod tests {
     #[test]
