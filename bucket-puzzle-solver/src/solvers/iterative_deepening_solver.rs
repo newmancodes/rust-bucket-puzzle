@@ -7,17 +7,24 @@ pub struct IterativeDeepeningSolver {
     max_depth: u8,
 }
 
-struct StateWithDepth<'a> {
-    pub state: &'a State,
+#[derive(Clone)]
+struct StateWithDepth {
+    pub state: State,
     pub depth: u8,
 }
 
-impl<'a> StateWithDepth<'a> {
-    pub fn new(state: &'a State, depth: u8) -> Self {
+impl StateWithDepth {
+    pub fn new(state: State, depth: u8) -> Self {
         StateWithDepth {
             state,
             depth,
         }
+    }
+}
+
+impl PartialEq<State> for StateWithDepth {
+    fn eq(&self, other: &State) -> bool {
+        self.state == *other
     }
 }
 
@@ -28,24 +35,26 @@ impl IterativeDeepeningSolver {
         }
     }
 
-    fn solve_with_limit(&self, state: &State, rules: &Rules, target: u8, limit: u8) -> Option<Solution> {
+    fn solve_with_limit(&self, state: &State, rules: Rules, target: u8, limit: u8) -> Option<Solution> {
         let mut frontier = vec![];
         let mut explored = vec![];
 
-        frontier.push(StateWithDepth::new(state, 0));
+        frontier.push(StateWithDepth::new(state.clone(), 0));
 
         loop {
-            let candidate = frontier.pop().unwrap();
+            let candidate = frontier.pop().unwrap().clone();
             if candidate.state.is_a_solution(target) {
                 return Some(Solution::from(candidate.state));
             }
 
-            explored.push(candidate);
+            explored.push(candidate.clone());
 
             if candidate.depth < limit {
                 let child_states = candidate.state.generate_child_states(rules);
                 for child_state in child_states {
-                    frontier.push(StateWithDepth::new(&child_state, candidate.depth + 1));
+                    if !explored.contains(child_state) && !frontier.contains(child_state) {
+                        frontier.push(StateWithDepth::new(child_state, candidate.depth + 1));
+                    }
                 }
             }
 
@@ -59,13 +68,17 @@ impl IterativeDeepeningSolver {
 }
 
 impl Solver for IterativeDeepeningSolver {
-    fn solve(self, problem: &State, rules: &Rules, target: u8) -> Option<Solution> {
+    fn solve(self, problem: State, rules: Rules, target: u8) -> Option<Solution> {
         let mut count: u8 = 0;
 
         loop {
             count += 1;
 
-            let result = self.solve_with_limit(problem, rules, target, count);
+            let result = self.solve_with_limit(&problem, rules, target, count);
+
+            if result.is_some() {
+                return result;
+            }
 
             if count == self.max_depth {
                 break;

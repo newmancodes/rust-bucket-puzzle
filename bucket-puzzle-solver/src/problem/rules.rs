@@ -1,6 +1,7 @@
+#[derive(Copy, Clone)]
 pub struct Rules {
-    can_refill: bool,
-    can_empty: bool,
+    pub can_refill: bool,
+    pub can_empty: bool,
 }
 
 impl Rules {

@@ -4,7 +4,6 @@ mod solvers;
 use problem::builder::Builder;
 use problem::rules::Rules;
 use solvers::iterative_deepening_solver::IterativeDeepeningSolver;
-use solvers::solution::Solution;
 use solvers::solver::Solver;
 
 #[cfg(test)]
@@ -16,16 +15,19 @@ mod tests {
         // Arrange
         let solver = IterativeDeepeningSolver::new(10);
         let problem = Builder::new()
-            .add_empty_bucket("Large", 5)
-            .add_empty_bucket("Small", 3)
+            .add_empty_bucket(5)
+            .add_empty_bucket(3)
             .build();
         let rules = Rules::new(true, true);
         let target: u8 = 4;
 
         // Act
-        let solution = solver.solve(&problem, &rules, target);
+        let solution = solver.solve(problem, rules, target);
 
         // Assert
         assert!(solution.is_some());
+        for step in solution.unwrap().steps {
+            println!("{:?}", step);
+        }
     }
 }

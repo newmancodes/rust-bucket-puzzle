@@ -12,13 +12,13 @@ impl Builder {
         }
     }
 
-    pub fn add_empty_bucket(mut self, label: &str, capacity: u8) -> Self {
-        self.buckets.push(Bucket::new(label, capacity));
+    pub fn add_empty_bucket(mut self, capacity: u8) -> Self {
+        self.buckets.push(Bucket::new(capacity));
         self
     }
 
-    pub fn add_filled_bucket(mut self, label: &str, capacity: u8) -> Self {
-        self.buckets.push(Bucket::new(label, capacity).fill());
+    pub fn add_filled_bucket(mut self, capacity: u8) -> Self {
+        self.buckets.push(Bucket::new(capacity).fill());
         self
     }
 
