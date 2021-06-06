@@ -92,7 +92,6 @@ mod tests {
     #[test]
     fn a_bucket_is_created_empty() {
         // Arrange
-        let label = "some_bucket_label";
         let capacity: u8 = 10;
 
         // Act

@@ -28,6 +28,12 @@ impl PartialEq<State> for StateWithDepth {
     }
 }
 
+impl PartialEq<StateWithDepth> for State {
+    fn eq(&self, other: &StateWithDepth) -> bool {
+        *self == other.state
+    }
+}
+
 impl IterativeDeepeningSolver {
     pub fn new(max_depth: u8) -> Self {
         IterativeDeepeningSolver {
@@ -52,7 +58,8 @@ impl IterativeDeepeningSolver {
             if candidate.depth < limit {
                 let child_states = candidate.state.generate_child_states(rules);
                 for child_state in child_states {
-                    if !explored.contains(child_state) && !frontier.contains(child_state) {
+                    if !explored.iter().any(| explored_state | { *explored_state == child_state})
+                        && !frontier.iter().any(| frontier_state | { *frontier_state == child_state}) {
                         frontier.push(StateWithDepth::new(child_state, candidate.depth + 1));
                     }
                 }

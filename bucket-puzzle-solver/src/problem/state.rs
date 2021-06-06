@@ -1,6 +1,5 @@
 use super::bucket::Bucket;
 use crate::problem::rules::Rules;
-use std::borrow::Borrow;
 use std::fmt::{Debug, Formatter, Result};
 use std::rc::Rc;
 
@@ -33,9 +32,9 @@ impl State {
         }
     }
 
-    pub fn get_parent_state(&self) -> Option<&State> {
+    pub fn get_parent_state(&self) -> Option<Rc<State>> {
         if self.parent_state.is_some() {
-            return Some(self.parent_state.unwrap().clone().borrow());
+            return self.parent_state.clone();
         }
 
         None
